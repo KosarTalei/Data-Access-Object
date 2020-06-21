@@ -1,6 +1,9 @@
-package ir.ac.kntu;
+package ir.ac.kntu.dao;
+
+import ir.ac.kntu.model.Person;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlainTextPersonDAO implements PersonDAO {
@@ -12,18 +15,25 @@ public class PlainTextPersonDAO implements PersonDAO {
 
     @Override
     public List<Person> getAllPersons() {
+        List<Person> personList = new ArrayList<>();
         File file = new File(sourceFileName);
         try(BufferedReader bufferedReader = new BufferedReader(new FileReader(file))){
-            String readLine = bufferedReader.readLine();
-            System.out.println("readLine = " + readLine);
-            //TODO read a line and parse it and convert it to a Person Object
+            String line = null;
+            while ((line = bufferedReader.readLine()) != null) {
+                String firstName = bufferedReader.readLine();
+                String lastName = bufferedReader.readLine();
+                int age = bufferedReader.read();
+
+                Person person = new Person(firstName,lastName,age);
+                personList.add(person);
+            }
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return null;
+        return personList;
     }
 
     @Override
@@ -31,7 +41,14 @@ public class PlainTextPersonDAO implements PersonDAO {
         File file = new File(sourceFileName);
         try(BufferedWriter bufferedReader = new BufferedWriter(new FileWriter(file))){
             bufferedReader.write("Test");
-            //TODO iterate on the list and convert it to a string and then write it on the file
+            for(Person person : list){
+                bufferedReader.write(person.getFirstName());
+                bufferedReader.newLine();
+                bufferedReader.write(person.getLastName());
+                bufferedReader.newLine();
+                bufferedReader.write(person.getAge());
+                bufferedReader.newLine();
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

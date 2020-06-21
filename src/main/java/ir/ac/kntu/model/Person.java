@@ -1,4 +1,4 @@
-package ir.ac.kntu;
+package ir.ac.kntu.model;
 
 import java.util.Objects;
 
